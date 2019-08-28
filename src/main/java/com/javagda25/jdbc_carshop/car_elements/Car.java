@@ -1,4 +1,4 @@
-package com.javagda25.jdbc_carshop;
+package com.javagda25.jdbc_carshop.car_elements;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

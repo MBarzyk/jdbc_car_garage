@@ -1,12 +1,13 @@
-package com.javagda25.jdbc_carshop;
+package com.javagda25.jdbc_carshop.car_elements;
+
+import com.javagda25.jdbc_carshop.MysqlConnection;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static com.javagda25.jdbc_carshop.CarQueries.*;
+import static com.javagda25.jdbc_carshop.car_elements.CarQueries.*;
 
 public class CarDao {
     private MysqlConnection mysqlConnection;
@@ -17,17 +18,17 @@ public class CarDao {
     }
 
     private void createTableIfNotExists() throws SQLException {
-        try(Connection connection = mysqlConnection.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(CREATE_TABLE_QUERY)) {
+        try (Connection connection = mysqlConnection.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(CREATE_TABLE_CAR)) {
                 statement.execute();
             }
         }
     }
 
-    public void insertCar (Car car) throws SQLException {
-        try(Connection connection = mysqlConnection.getConnection()) {
+    public void insertCar(Car car) throws SQLException {
+        try (Connection connection = mysqlConnection.getConnection()) {
 
-            try(PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_CAR, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, car.getPlates());
                 statement.setLong(2, car.getMileage());
                 statement.setString(3, car.getModel());
@@ -45,9 +46,9 @@ public class CarDao {
         }
     }
 
-    public void deleteCarId (Long id) throws SQLException {
+    public void deleteCarId(Long id) throws SQLException {
         try (Connection connection = mysqlConnection.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(DELETE_ID_QUERY)) {
+            try (PreparedStatement statement = connection.prepareStatement(DELETE_ID_CAR)) {
                 statement.setLong(1, id);
 
                 int affectedRecords = statement.executeUpdate();
@@ -59,9 +60,10 @@ public class CarDao {
             }
         }
     }
-    public void deleteCarPlates (String plates) throws SQLException {
+
+    public void deleteCarPlates(String plates) throws SQLException {
         try (Connection connection = mysqlConnection.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(DELETE_PLATES_QUERY)) {
+            try (PreparedStatement statement = connection.prepareStatement(DELETE_PLATES_CAR)) {
                 statement.setString(1, plates);
 
                 int affectedRecords = statement.executeUpdate();
@@ -77,7 +79,7 @@ public class CarDao {
     public List<Car> listAllCars() throws SQLException {
         try (Connection connection = mysqlConnection.getConnection()) {
             List<Car> carList = new ArrayList<>();
-            try (PreparedStatement statement = connection.prepareStatement(LIST_QUERY)) {
+            try (PreparedStatement statement = connection.prepareStatement(LIST_CAR)) {
                 ResultSet resultSet = statement.executeQuery();
 
                 loadMultipleCarsFromResultSet(carList, resultSet);
@@ -86,20 +88,19 @@ public class CarDao {
         }
     }
 
-    public Optional<Car> getCar (String line, String query) throws SQLException {
+    public List<Car> getCar(String line, String query) throws SQLException {
         try (Connection connection = mysqlConnection.getConnection()) {
+            List<Car> carList = new ArrayList<>();
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, "%" + line + "%");
                 ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next()) {
-                    Car car = loadCarFromResultSet(resultSet);
-                    return Optional.of(car);
-                }
+
+                loadMultipleCarsFromResultSet(carList, resultSet);
+
             }
-            return Optional.empty();
+            return carList;
         }
     }
-
 
 
     private Car loadCarFromResultSet(ResultSet resultSet) throws SQLException {
