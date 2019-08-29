@@ -42,7 +42,7 @@ public class OrderDao {
         }
     }
 
-    public List<Order> listAllOrders(Long id) throws SQLException {
+    public List<Order> listAllOrdersOfId (Long id) throws SQLException {
         try (Connection connection = mysqlConnection.getConnection()) {
             List<Order> orderList = new ArrayList<>();
             try (PreparedStatement statement = connection.prepareStatement(LIST_ALL_ORDERS_ID)) {

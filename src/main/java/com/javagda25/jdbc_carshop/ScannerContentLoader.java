@@ -7,6 +7,7 @@ import com.javagda25.jdbc_carshop.order_elements.Order;
 import com.javagda25.jdbc_carshop.order_elements.OrderDao;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.javagda25.jdbc_carshop.car_elements.CarQueries.*;
@@ -43,21 +44,41 @@ public class ScannerContentLoader {
                     System.out.println("Give car ID");
                     Long carId = Long.parseLong(scanner.nextLine());
 
-                    orderDao.listAllOrders(carId).forEach(System.out::println);
+                    List<Order> orderList = orderDao.listAllOrdersOfId(carId);
+                    if (orderList.isEmpty()) {
+                        System.out.println("There is no orders for id car: " + carId);
+                    } else {
+                        orderList.forEach(System.out::println);
+                    }
 
                 } else if (line.equalsIgnoreCase("listNonExecuted")) {
 
-                    orderDao.listOrdersByQuery(LIST_NONEXECUTED).forEach(System.out::println);
+                    List<Order> orderList = orderDao.listOrdersByQuery(LIST_NONEXECUTED);
+                    if (orderList.isEmpty()) {
+                        System.out.println("There are none non-executed orders");
+                    } else {
+                        orderList.forEach(System.out::println);
+                    }
 
                 } else if (line.equalsIgnoreCase("listExecuted")) {
 
-                    orderDao.listOrdersByQuery(LIST_EXECUTED).forEach(System.out::println);
+                    List<Order> orderList = orderDao.listOrdersByQuery(LIST_EXECUTED);
+                    if (orderList.isEmpty()) {
+                        System.out.println("There are none executed orders");
+                    } else {
+                        orderList.forEach(System.out::println);
+                    }
 
                 } else if (line.equalsIgnoreCase("listDaysAgo")) {
                     System.out.println("Show orders from how many days ago?");
                     int days = Integer.parseInt(scanner.nextLine());
 
-                    orderDao.listOrdersByDaysAgo(days).forEach(System.out::println);
+                    List<Order> orderList = orderDao.listOrdersByDaysAgo(days);
+                    if (orderList.isEmpty()) {
+                        System.out.println("There were no orders found within given time period");
+                    } else {
+                        orderList.forEach(System.out::println);
+                    }
                 } else if (line.equalsIgnoreCase("return")) {
                     break;
                 } else if (line.equalsIgnoreCase("exit")) {
@@ -116,24 +137,47 @@ public class ScannerContentLoader {
 
                 } else if (line.equalsIgnoreCase("listAll")) {
 
-                    carDao.listAllCars().forEach(System.out::println);
+                    List<Car> cars = carDao.listAllCars();
+                    if (cars.isEmpty()) {
+                        System.out.println("There were no cars found");
+                    } else {
+                        cars.forEach(System.out::println);
+                    }
 
                 } else if (line.equalsIgnoreCase("selectName")) {
                     System.out.println("Give name");
                     String name = scanner.nextLine();
 
-                    System.out.println(carDao.getCar(name, SELECT_NAME));
+                    List<Car> carList = carDao.getCar(name, SELECT_NAME);
+                    if (carList.isEmpty()) {
+                        System.out.println("There were no cars found with given owner's name");
+                    } else {
+                        carList.forEach(System.out::println);
+                    }
+
+
                 } else if (line.equalsIgnoreCase("selectPlates")) {
                     System.out.println("Give plates");
                     String name = scanner.nextLine();
 
-                    System.out.println(carDao.getCar(name, SELECT_PLATES));
+                    List<Car> carList = carDao.getCar(name, SELECT_PLATES);
+                    if (carList.isEmpty()) {
+                        System.out.println("There were no cars found with given plates");
+                    } else {
+                        carList.forEach(System.out::println);
+                    }
 
                 } else if (line.equalsIgnoreCase("selectModel")) {
                     System.out.println("Give model");
                     String name = scanner.nextLine();
 
-                    System.out.println(carDao.getCar(name, SELECT_MODEL));
+                    List<Car> carList = carDao.getCar(name, SELECT_MODEL);
+                    if (carList.isEmpty()) {
+                        System.out.println("There were no cars found with given model");
+                    } else {
+                        carList.forEach(System.out::println);
+                    }
+
                 } else if (line.equalsIgnoreCase("return")) {
                     break;
 
