@@ -4,14 +4,16 @@ public interface OrderQueries {
     String CREATE_TABLE_ORDER = "create table if not exists `order` (\n" +
             "`id` int not null auto_increment primary key,\n" +
             "`car_id` int not null,\n" +
-            "`date_of_order` date not null,\n" +
+            "`date_of_order` datetime not null,\n" +
             "`if_executed` tinyint not null default 0,\n" +
-            "`date_of_execution` date default null,\n" +
+            "`date_of_execution` datetime default null,\n" +
             "`description` varchar(100),\n" +
             "foreign key (car_id) references car (id)\n" +
             ");";
 
     String LIST_ALL_ORDERS_ID = "select * from `order` where car_id = ?;";
+
+    String LIST_ALL_ORDERS = "select * from `order`;";
 
     String INSERT_ORDER = "insert into `order` (`car_id`, `date_of_order`, `description`)\n" +
             "values (?, now(), ?);";

@@ -55,6 +55,8 @@ public class OrderDao {
         }
     }
 
+
+
     public void setOrderAsExecuted(Long id) throws SQLException {
         try (Connection connection = mysqlConnection.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SET_ORDER_EXECUTE)) {

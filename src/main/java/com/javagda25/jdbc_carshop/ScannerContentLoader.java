@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static com.javagda25.jdbc_carshop.car_elements.CarQueries.*;
-import static com.javagda25.jdbc_carshop.order_elements.OrderQueries.LIST_EXECUTED;
-import static com.javagda25.jdbc_carshop.order_elements.OrderQueries.LIST_NONEXECUTED;
+import static com.javagda25.jdbc_carshop.order_elements.OrderQueries.*;
 
 public class ScannerContentLoader {
     private final Scanner scanner = new Scanner(System.in);
@@ -22,7 +21,7 @@ public class ScannerContentLoader {
         String line;
         System.out.println("Welcome to Order Manager!");
         do {
-            System.out.println("What to do? [add][setExecuted][listAll][listExecuted][ListNonExecuted][ListDaysAgo][return][exit]");
+            System.out.println("What to do? [add][setExecuted][listAll][listAllCarId][listExecuted][ListNonExecuted][ListDaysAgo][return][exit]");
             line = scanner.nextLine();
             try {
                 if (line.equalsIgnoreCase("add")) {
@@ -40,7 +39,7 @@ public class ScannerContentLoader {
 
                     orderDao.setOrderAsExecuted(id);
 
-                } else if (line.equalsIgnoreCase("listAll")) {
+                } else if (line.equalsIgnoreCase("listAllCarId")) {
                     System.out.println("Give car ID");
                     Long carId = Long.parseLong(scanner.nextLine());
 
@@ -65,6 +64,14 @@ public class ScannerContentLoader {
                     List<Order> orderList = orderDao.listOrdersByQuery(LIST_EXECUTED);
                     if (orderList.isEmpty()) {
                         System.out.println("There are none executed orders");
+                    } else {
+                        orderList.forEach(System.out::println);
+                    }
+                } else if (line.equalsIgnoreCase("listAll")) {
+
+                    List<Order> orderList = orderDao.listOrdersByQuery(LIST_ALL_ORDERS);
+                    if (orderList.isEmpty()) {
+                        System.out.println("There are no orders");
                     } else {
                         orderList.forEach(System.out::println);
                     }
